@@ -9,6 +9,7 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
@@ -21,6 +22,9 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 public class step {
+
+    @Value("${spring.batch.endereco}")
+    private String endereco;
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
@@ -37,7 +41,7 @@ public class step {
 
     public FlatFileItemReader<PokemonDTO> reader(){
         FlatFileItemReader<PokemonDTO> reader = new FlatFileItemReader<>();
-        reader.setResource(new PathResource("C:\\Users\\jpereira\\Documents\\workspace-java\\item-oriented\\pokemon.csv"));
+        reader.setResource(new PathResource(endereco));
         reader.setLineMapper(new DefaultLineMapper<>() {{
                 setLineTokenizer(new DelimitedLineTokenizer() {{
                     setNames(new String[]{"numero", "name", "type1", "type2", "hp", "attack", "defense", "spAttack", "spDefense", "speed", "generation", "legendary"});
