@@ -17,6 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import br.com.jonathan.item_oriented.entities.Pokemon;
 import br.com.jonathan.item_oriented.entities.dtos.PokemonDTO;
+import br.com.jonathan.item_oriented.listeners.CustomerStepListener;
 import br.com.jonathan.item_oriented.processor.PokemonItemProcessor;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -29,6 +30,9 @@ public class step {
     @Autowired
     EntityManagerFactory entityManagerFactory;
 
+    @Autowired
+    CustomerStepListener customerStepListener;
+
     @Bean
     public Step processarCSVStep(JobRepository jobRepository, PlatformTransactionManager transactionManager){
         return new StepBuilder("processarCSVStep", jobRepository)
@@ -36,6 +40,7 @@ public class step {
         .reader(reader())
         .processor(processor())
         .writer(writer())
+        .listener(customerStepListener)
         .build();
     }
 
